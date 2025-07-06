@@ -79,7 +79,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride, index }) => {
         className="flex-shrink-0 w-72 sm:w-80 h-[450px] relative group cursor-pointer"
         onClick={() => setIsPreviewOpen(true)}
       >
-        <Card className="h-full overflow-hidden premium-card card-hover-lift border-0 rounded-2xl group transform-gpu relative">
+        <Card className="h-full overflow-hidden bg-gradient-to-br from-slate-900/95 via-blue-900/90 to-slate-900/95 backdrop-blur-xl border border-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 rounded-2xl group transform-gpu relative card-hover-lift">
           {/* Image Section with Enhanced Effects */}
           <div className="relative h-56 overflow-hidden rounded-t-2xl">
             <motion.img
@@ -175,14 +175,14 @@ const RideCard: React.FC<RideCardProps> = ({ ride, index }) => {
           </div>
           
           {/* Enhanced Content Section */}
-          <CardContent className="p-6 h-[194px] flex flex-col justify-between bg-gradient-to-br from-white via-blue-50/30 to-white relative overflow-hidden">
+          <CardContent className="p-6 h-[194px] flex flex-col justify-between bg-gradient-to-br from-slate-800/80 via-blue-800/60 to-slate-800/80 relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-5 bg-pattern" />
             
             <div className="space-y-3 relative z-10">
               {/* Title with Premium Animation */}
               <motion.h3 
-                className="text-xl font-bold text-wonderla-blue leading-tight group-hover:text-gradient-animated transition-all duration-300"
+                className="text-xl font-bold text-white leading-tight group-hover:text-wonderla-yellow transition-all duration-300"
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.1 + 0.6 }}
@@ -193,7 +193,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride, index }) => {
               
               {/* Location with Enhanced Icon */}
               <motion.div 
-                className="flex items-center gap-2 text-gray-600"
+                className="flex items-center gap-2 text-gray-300"
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.1 + 0.7 }}
@@ -204,7 +204,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride, index }) => {
               
               {/* Quick Stats */}
               <motion.div
-                className="flex items-center gap-4 text-xs text-gray-500"
+                className="flex items-center gap-4 text-xs text-gray-400"
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.1 + 0.75 }}
@@ -221,7 +221,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride, index }) => {
               
               {/* Description */}
               <motion.p 
-                className="text-gray-700 text-sm leading-relaxed line-clamp-2"
+                className="text-gray-300 text-sm leading-relaxed line-clamp-2"
                 initial={{ y: 10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: index * 0.1 + 0.8 }}

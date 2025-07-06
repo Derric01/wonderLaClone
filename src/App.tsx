@@ -16,11 +16,12 @@ function App() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading time for premium experience
+  // Simulate loading for better UX
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000);
+    }, 2500);
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -67,7 +68,21 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
+      {/* Dynamic Animated Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-wonderla-blue/20 via-purple-900/30 to-slate-900/40">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-wonderla-yellow/10 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-blue-600/10 via-transparent to-transparent"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-purple-600/10 via-transparent to-transparent"></div>
+      </div>
+      
+      {/* Animated Mesh Gradient */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 -left-4 w-72 h-72 bg-gradient-to-r from-wonderla-yellow/30 to-orange-400/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse"></div>
+        <div className="absolute top-0 -right-4 w-72 h-72 bg-gradient-to-r from-blue-500/30 to-wonderla-blue/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-1000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-gradient-to-r from-purple-500/30 to-pink-500/30 rounded-full mix-blend-multiply filter blur-xl animate-pulse delay-2000"></div>
+      </div>
+      
       {/* AMAZING Particle System */}
       <ParticleSystem />
       
@@ -77,13 +92,17 @@ function App() {
       {/* Scroll to Top Button */}
       <ScrollToTop />
       
-      {/* Enhanced Header */}
+      {/* Enhanced Header with Glass Morphism */}
       <motion.header 
-        className="glass-effect shadow-lg border-b border-wonderla-blue/10 z-20 sticky top-0"
+        className="relative z-20 sticky top-0"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
+        {/* Premium Glass Background */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-xl border-b border-white/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-wonderla-blue/10 via-transparent to-wonderla-yellow/10"></div>
+        </div>
 
         {/* Main Header */}
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -132,7 +151,7 @@ function App() {
                 <motion.a 
                   key={item.name}
                   href="#" 
-                  className="group relative px-4 py-3 text-gray-700 hover:text-wonderla-blue font-bold transition-all duration-300 rounded-lg hover:bg-blue-50"
+                  className="group relative px-4 py-3 text-white/90 hover:text-wonderla-yellow font-bold transition-all duration-300 rounded-lg hover:bg-white/10 backdrop-blur-sm"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -174,7 +193,7 @@ function App() {
         {/* Mobile Navigation Menu */}
         {isDropdownOpen && (
           <motion.div 
-            className="lg:hidden bg-white/98 backdrop-blur-lg border-t border-wonderla-blue/20"
+            className="lg:hidden glass-effect border-t border-white/20"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
@@ -193,7 +212,7 @@ function App() {
                   <motion.a 
                     key={item.name}
                     href="#" 
-                    className="flex items-center space-x-3 p-4 bg-blue-50 rounded-xl text-wonderla-blue font-bold hover:bg-blue-100 transition-all duration-300"
+                    className="flex items-center space-x-3 p-4 bg-white/10 backdrop-blur-sm rounded-xl text-white font-bold hover:bg-white/20 transition-all duration-300"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.1 }}
@@ -255,9 +274,12 @@ function App() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="bg-white py-12 sm:py-16 relative z-10">
-        <div className="max-w-7xl mx-auto px-4">
+      {/* Stats Section with Glass Effect */}
+      <section className="relative z-10 py-12 sm:py-16">
+        <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-white/10 backdrop-blur-lg border-y border-white/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-wonderla-blue/5 via-transparent to-wonderla-yellow/5"></div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <motion.div 
               className="text-center group"
@@ -266,8 +288,8 @@ function App() {
               transition={{ duration: 0.6 }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">25+</div>
-              <div className="text-gray-600 font-medium text-sm sm:text-base">YEARS OF THRILLS</div>
+              <div className="text-3xl sm:text-4xl font-black text-white mb-2 group-hover:text-wonderla-yellow transition-colors neon-glow">25+</div>
+              <div className="text-gray-300 font-medium text-sm sm:text-base">YEARS OF THRILLS</div>
             </motion.div>
             <motion.div 
               className="text-center group"
@@ -276,8 +298,8 @@ function App() {
               transition={{ duration: 0.6, delay: 0.1 }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">50M+</div>
-              <div className="text-gray-600 font-medium text-sm sm:text-base">HAPPY VISITORS</div>
+              <div className="text-3xl sm:text-4xl font-black text-white mb-2 group-hover:text-wonderla-yellow transition-colors neon-glow">50M+</div>
+              <div className="text-gray-300 font-medium text-sm sm:text-base">HAPPY VISITORS</div>
             </motion.div>
             <motion.div 
               className="text-center group"
@@ -286,8 +308,8 @@ function App() {
               transition={{ duration: 0.6, delay: 0.2 }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">60+</div>
-              <div className="text-gray-600 font-medium text-sm sm:text-base">AMAZING RIDES</div>
+              <div className="text-3xl sm:text-4xl font-black text-white mb-2 group-hover:text-wonderla-yellow transition-colors neon-glow">60+</div>
+              <div className="text-gray-300 font-medium text-sm sm:text-base">AMAZING RIDES</div>
             </motion.div>
             <motion.div 
               className="text-center group"
@@ -296,8 +318,8 @@ function App() {
               transition={{ duration: 0.6, delay: 0.3 }}
               whileHover={{ scale: 1.05 }}
             >
-              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">4</div>
-              <div className="text-gray-600 font-medium text-sm sm:text-base">ICONIC LOCATIONS</div>
+              <div className="text-3xl sm:text-4xl font-black text-white mb-2 group-hover:text-wonderla-yellow transition-colors neon-glow">4</div>
+              <div className="text-gray-300 font-medium text-sm sm:text-base">ICONIC LOCATIONS</div>
             </motion.div>
           </div>
         </div>
