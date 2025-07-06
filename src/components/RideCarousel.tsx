@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Star, Trophy, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import RideCard from './RideCard';
 import { Ride, RideCategory } from '@/types/ride';
@@ -17,15 +17,16 @@ const RideCarousel: React.FC<RideCarouselProps> = ({ rides, categories }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const filteredRides = rides.filter(ride => ride.category === selectedCategory);
-  const visibleRides = 4;
+  const visibleRides = 4; // Number of cards visible at once
   const maxIndex = Math.max(0, filteredRides.length - visibleRides);
 
+  // Auto-scroll functionality
   useEffect(() => {
     if (!isAutoPlaying) return;
 
     const interval = setInterval(() => {
       setCurrentIndex(prev => (prev >= maxIndex ? 0 : prev + 1));
-    }, 5000);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [isAutoPlaying, maxIndex]);
@@ -47,95 +48,111 @@ const RideCarousel: React.FC<RideCarouselProps> = ({ rides, categories }) => {
   };
 
   return (
-    <div className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-20 px-4 overflow-hidden particles-bg">
-      {/* Enhanced Background Elements */}
-      <div className="absolute inset-0">
-        {/* Animated Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-wonderla-blue/30 via-blue-800/40 to-indigo-900/50 animate-gradient gradient-animate" />
-        
-        {/* Floating Geometric Shapes */}
-        {Array.from({ length: 8 }).map((_, index) => (
+    <div className="relative w-full bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 py-20 px-4 overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div 
+          className="absolute inset-0 bg-repeat"
+          style={{ 
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` 
+          }}
+        />
+      </div>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
           <motion.div
-            key={`shape-${index}`}
-            className="absolute opacity-10"
-            initial={{ scale: 0, rotate: 0 }}
-            animate={{ 
-              scale: [0, 1, 0.8, 1],
-              rotate: [0, 180, 360],
+            key={i}
+            className="absolute w-2 h-2 bg-wonderla-yellow rounded-full opacity-30"
+            animate={{
+              y: [-20, -100],
               x: [0, Math.random() * 100 - 50],
-              y: [0, Math.random() * 100 - 50]
+              opacity: [0, 1, 0],
             }}
             transition={{
-              duration: 8 + index,
+              duration: Math.random() * 3 + 2,
               repeat: Infinity,
-              delay: index * 0.5,
-              ease: "easeInOut"
+              delay: Math.random() * 2,
             }}
             style={{
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${40 + Math.random() * 60}px`,
-              height: `${40 + Math.random() * 60}px`,
-              background: `linear-gradient(45deg, #FCD34D, #3B82F6, #8B5CF6)`,
-              borderRadius: index % 2 === 0 ? '50%' : '0%',
+              top: '100%',
             }}
           />
         ))}
-        
-        {/* Sparkle Effects */}
-        {Array.from({ length: 15 }).map((_, index) => (
-          <motion.div
-            key={`sparkle-${index}`}
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ 
-              opacity: [0, 1, 0],
-              scale: [0, 1.5, 0],
-              rotate: [0, 180, 360]
-            }}
-            transition={{
-              duration: 3,
-              delay: index * 0.2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="absolute"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-          >
-            <Sparkles className="w-4 h-4 text-wonderla-yellow" />
-          </motion.div>
-        ))}
-      </div>
-      {/* Animated background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-2 h-2 bg-wonderla-yellow rounded-full animate-float opacity-60"></div>
-        <div className="absolute top-40 right-20 w-1 h-1 bg-blue-400 rounded-full animate-bounce delay-1000 opacity-40"></div>
-        <div className="absolute bottom-32 left-1/4 w-3 h-3 bg-white rounded-full animate-pulse delay-500 opacity-30"></div>
-        <div className="absolute top-60 right-1/3 w-1.5 h-1.5 bg-wonderla-yellow rounded-full animate-ping delay-2000 opacity-50"></div>
-        
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-wonderla-yellow rounded-full mix-blend-multiply filter blur-xl opacity-15 animate-float delay-1000"></div>
-        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-float delay-2000"></div>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Enhanced Category Navigation */}
+        {/* Header Section */}
         <motion.div 
-          className="flex justify-center mb-12"
+          className="text-center mb-16"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="flex items-center glass rounded-2xl p-3 gap-3 shadow-2xl">
+          <div className="flex justify-center items-center gap-2 mb-4">
+            <Star className="w-6 h-6 text-wonderla-yellow" />
+            <span className="text-wonderla-yellow font-bold tracking-wider uppercase">Premium Experiences</span>
+            <Star className="w-6 h-6 text-wonderla-yellow" />
+          </div>
+          
+          <h2 className="text-6xl font-black text-white mb-6 relative">
+            <span className="bg-gradient-to-r from-white via-wonderla-yellow to-white bg-clip-text text-transparent">
+              OUR ICONIC RIDES
+            </span>
+          </h2>
+          
+          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-wonderla-yellow to-transparent mx-auto mb-6"></div>
+          
+          <p className="text-xl text-blue-200 max-w-3xl mx-auto leading-relaxed">
+            Discover heart-pounding adventures and unforgettable thrills across our world-class attractions. 
+            Each ride is designed to create memories that last a lifetime.
+          </p>
+        </motion.div>
+
+        {/* Stats Banner */}
+        <motion.div 
+          className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-12 border border-white/20"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="grid grid-cols-3 gap-8 text-center">
+            <div className="flex items-center justify-center gap-3">
+              <Trophy className="w-8 h-8 text-wonderla-yellow" />
+              <div>
+                <div className="text-2xl font-black text-white">60+</div>
+                <div className="text-blue-200 font-medium">Thrilling Rides</div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-3">
+              <Users className="w-8 h-8 text-wonderla-yellow" />
+              <div>
+                <div className="text-2xl font-black text-white">50M+</div>
+                <div className="text-blue-200 font-medium">Happy Guests</div>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-3">
+              <Star className="w-8 h-8 text-wonderla-yellow" />
+              <div>
+                <div className="text-2xl font-black text-white">4.5/5</div>
+                <div className="text-blue-200 font-medium">Guest Rating</div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Category Navigation */}
+        <div className="flex justify-center mb-12">
+          <div className="flex items-center bg-white/10 backdrop-blur-sm rounded-full p-2 gap-2 border border-white/20">
             {categories.map((category, index) => (
               <motion.button
                 key={category.id}
                 onClick={() => handleCategoryChange(category.id)}
-                className={`flex items-center gap-3 px-8 py-4 rounded-xl transition-all duration-500 relative overflow-hidden ${
+                className={`flex items-center gap-3 px-8 py-4 rounded-full transition-all duration-300 font-bold ${
                   selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-wonderla-yellow to-yellow-400 text-wonderla-blue shadow-xl scale-105'
+                    ? 'bg-wonderla-yellow text-wonderla-blue shadow-xl scale-105'
                     : 'text-white hover:bg-white/20 hover:scale-105'
                 }`}
                 whileHover={{ scale: 1.05 }}
@@ -144,95 +161,48 @@ const RideCarousel: React.FC<RideCarouselProps> = ({ rides, categories }) => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                {selectedCategory === category.id && (
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-wonderla-yellow to-yellow-400 rounded-xl"
-                    layoutId="activeCategory"
-                    transition={{ duration: 0.3 }}
-                  />
-                )}
-                <span className="text-2xl relative z-10">{category.icon}</span>
-                <div className="text-left relative z-10">
-                  <div className="font-bold text-lg">{category.name}</div>
-                  <div className="text-sm opacity-80">{category.rides} Epic Rides</div>
+                <span className="text-2xl">{category.icon}</span>
+                <div className="text-left">
+                  <div className="font-black text-lg">{category.name}</div>
+                  <div className="text-sm opacity-80">{category.rides} Rides</div>
                 </div>
-                {selectedCategory === category.id && (
-                  <Sparkles className="w-5 h-5 relative z-10 animate-pulse" />
-                )}
               </motion.button>
             ))}
           </div>
-        </motion.div>
+        </div>
 
-        {/* Enhanced Title Section */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <motion.h2 
-            className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-wonderla-yellow to-blue-400 mb-6 leading-tight neon-glow hover-lift"
-            whileHover={{ 
-              scale: 1.05,
-              textShadow: "0 0 20px rgba(252, 211, 77, 0.8)"
-            }}
-            transition={{ duration: 0.3 }}
-            style={{
-              filter: "drop-shadow(0 0 10px rgba(252, 211, 77, 0.5))"
-            }}
-          >
-            OUR ICONIC RIDES
-          </motion.h2>
-          <motion.div 
-            className="w-32 h-2 bg-gradient-to-r from-wonderla-yellow via-blue-400 to-wonderla-yellow mx-auto rounded-full mb-4"
-            initial={{ width: 0 }}
-            animate={{ width: 128 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          ></motion.div>
-          <motion.p
-            className="text-blue-200 text-xl max-w-2xl mx-auto leading-relaxed"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-          >
-            Experience heart-pounding thrills and unforgettable adventures at India's premier amusement parks
-          </motion.p>
-        </motion.div>
-
-        {/* Enhanced Carousel Container */}
+        {/* Carousel Container */}
         <div 
           className="relative overflow-hidden rounded-3xl"
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
-          {/* Premium Navigation Arrows */}
+          {/* Navigation Arrows */}
           <Button
             variant="ghost"
             size="icon"
             onClick={handlePrevious}
-            className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-gradient-to-r from-wonderla-yellow to-yellow-400 hover:from-yellow-400 hover:to-wonderla-yellow text-wonderla-blue rounded-2xl w-16 h-16 shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300"
+            className="absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-wonderla-yellow/95 hover:bg-wonderla-yellow text-wonderla-blue rounded-full w-14 h-14 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
           >
-            <ChevronLeft className="w-8 h-8" />
+            <ChevronLeft className="w-7 h-7" />
           </Button>
 
           <Button
             variant="ghost"
             size="icon"
             onClick={handleNext}
-            className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-gradient-to-r from-wonderla-yellow to-yellow-400 hover:from-yellow-400 hover:to-wonderla-yellow text-wonderla-blue rounded-2xl w-16 h-16 shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300"
+            className="absolute right-6 top-1/2 -translate-y-1/2 z-20 bg-wonderla-yellow/95 hover:bg-wonderla-yellow text-wonderla-blue rounded-full w-14 h-14 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-110"
           >
-            <ChevronRight className="w-8 h-8" />
+            <ChevronRight className="w-7 h-7" />
           </Button>
 
-          {/* Enhanced Carousel Track */}
-          <motion.div 
+          {/* Carousel Track */}
+          <div 
             ref={carouselRef}
-            className="flex transition-all duration-700 ease-out gap-8 px-20 py-8"
+            className="flex transition-transform duration-700 ease-out gap-8 px-20 py-8"
             style={{
-              transform: `translateX(-${currentIndex * (320 + 32)}px)`
+              transform: `translateX(-${currentIndex * (320 + 32)}px)` // 320px card width + 32px gap
             }}
-            layout
           >
             {filteredRides.map((ride, index) => (
               <RideCard 
@@ -241,50 +211,11 @@ const RideCarousel: React.FC<RideCarouselProps> = ({ rides, categories }) => {
                 index={index}
               />
             ))}
-          </motion.div>
+          </div>
         </div>
 
-        {/* Enhanced CTA Section */}
-        <motion.div 
-          className="text-center mt-20"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Button 
-              variant="wonderla" 
-              size="lg"
-              className="px-16 py-6 text-xl font-black rounded-2xl bg-gradient-to-r from-wonderla-yellow via-yellow-400 to-wonderla-yellow hover:from-yellow-400 hover:to-yellow-300 shadow-2xl hover:shadow-3xl transform transition-all duration-500 animate-pulse-glow"
-            >
-              <span className="flex items-center gap-3">
-                <Sparkles className="w-6 h-6 animate-spin" />
-                Explore All Epic Rides!
-                <Sparkles className="w-6 h-6 animate-spin" />
-              </span>
-            </Button>
-          </motion.div>
-          
-          <motion.p
-            className="text-blue-300 mt-4 text-lg"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            Join millions of thrill-seekers who have experienced the magic ✨
-          </motion.p>
-        </motion.div>
-
-        {/* Enhanced Pagination Dots */}
-        <motion.div 
-          className="flex justify-center mt-12 gap-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
+        {/* Pagination Dots */}
+        <div className="flex justify-center mt-8 gap-3">
           {Array.from({ length: maxIndex + 1 }).map((_, index) => (
             <motion.button
               key={index}
@@ -292,15 +223,37 @@ const RideCarousel: React.FC<RideCarouselProps> = ({ rides, categories }) => {
                 setCurrentIndex(index);
                 setIsAutoPlaying(false);
               }}
-              className={`rounded-full transition-all duration-500 ${
+              className={`w-4 h-4 rounded-full transition-all duration-300 ${
                 currentIndex === index 
-                  ? 'w-12 h-4 bg-gradient-to-r from-wonderla-yellow to-yellow-400 shadow-lg' 
-                  : 'w-4 h-4 bg-white/40 hover:bg-white/60'
+                  ? 'bg-wonderla-yellow scale-125 shadow-lg' 
+                  : 'bg-white/40 hover:bg-white/60 hover:scale-110'
               }`}
               whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.8 }}
+              whileTap={{ scale: 0.9 }}
             />
           ))}
+        </div>
+
+        {/* Explore All Rides Button */}
+        <motion.div 
+          className="text-center mt-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+        >
+          <Button 
+            variant="wonderla" 
+            size="lg"
+            className="px-12 py-6 text-xl font-black rounded-full shadow-2xl hover:shadow-3xl bg-gradient-to-r from-wonderla-yellow to-yellow-400 hover:from-yellow-400 hover:to-wonderla-yellow transform hover:scale-105 transition-all duration-300"
+          >
+            <Star className="mr-3 w-6 h-6" />
+            Explore All Rides!
+            <ChevronRight className="ml-3 w-6 h-6" />
+          </Button>
+          
+          <p className="text-blue-200 mt-4 text-lg">
+            Ready for the ultimate adventure? Book your tickets now!
+          </p>
         </motion.div>
       </div>
     </div>
