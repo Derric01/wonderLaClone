@@ -1,16 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail, Calendar, Clock, Users, Star } from 'lucide-react';
 import RideCarousel from './components/RideCarousel';
 import DropdownMenu from './components/DropdownMenu';
 import FloatingElements from './components/FloatingElements';
 import VideoSection from './components/VideoSection';
+import ParticleSystem from './components/ParticleSystem';
+import ScrollToTop from './components/ScrollToTop';
+import MagicalLoader from './components/MagicalLoader';
 import { Button } from './components/ui/button';
 import { rides, rideCategories } from './data/rides';
 import './index.css';
 
 function App() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading time for premium experience
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const videoData = [
     {
@@ -50,14 +62,24 @@ function App() {
     }
   ];
 
+  if (isLoading) {
+    return <MagicalLoader />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* AMAZING Particle System */}
+      <ParticleSystem />
+      
       {/* Floating Elements */}
       <FloatingElements />
       
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
+      
       {/* Enhanced Header */}
       <motion.header 
-        className="bg-white/95 backdrop-blur-md shadow-lg border-b border-wonderla-blue/10 relative z-20 sticky top-0"
+        className="glass-effect shadow-lg border-b border-wonderla-blue/10 z-20 sticky top-0"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -83,6 +105,20 @@ function App() {
               />
             </motion.div>
             
+            {/* Mobile Menu Button */}
+            <motion.button 
+              className="lg:hidden bg-wonderla-blue text-white p-3 rounded-full"
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <div className="w-6 h-6 flex flex-col justify-center space-y-1">
+                <div className="w-6 h-0.5 bg-white rounded-full"></div>
+                <div className="w-6 h-0.5 bg-white rounded-full"></div>
+                <div className="w-6 h-0.5 bg-white rounded-full"></div>
+              </div>
+            </motion.button>
+
             {/* Navigation */}
             <nav className="hidden lg:flex items-center space-x-1">
               {[
@@ -112,33 +148,77 @@ function App() {
             </nav>
             
             {/* Book Tickets & Dropdown */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 md:space-x-4">
               <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="hidden sm:block"
               >
-                <Button className="bg-gradient-to-r from-wonderla-yellow to-yellow-400 hover:from-yellow-400 hover:to-wonderla-yellow text-wonderla-blue font-black px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300">
-                  <Calendar className="mr-2 w-5 h-5" />
-                  BOOK TICKETS
+                <Button className="bg-gradient-to-r from-wonderla-yellow to-yellow-400 hover:from-yellow-400 hover:to-wonderla-yellow text-wonderla-blue font-black px-4 md:px-6 py-2 md:py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 text-sm md:text-base">
+                  <Calendar className="mr-1 md:mr-2 w-4 h-4 md:w-5 md:h-5" />
+                  <span className="hidden sm:inline">BOOK TICKETS</span>
+                  <span className="sm:hidden">BOOK</span>
                 </Button>
               </motion.div>
               
-              <DropdownMenu 
-                isOpen={isDropdownOpen} 
-                onToggle={() => setIsDropdownOpen(!isDropdownOpen)} 
-              />
+              <div className="hidden lg:block">
+                <DropdownMenu 
+                  isOpen={isDropdownOpen} 
+                  onToggle={() => setIsDropdownOpen(!isDropdownOpen)} 
+                />
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {isDropdownOpen && (
+          <motion.div 
+            className="lg:hidden bg-white/98 backdrop-blur-lg border-t border-wonderla-blue/20"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="max-w-7xl mx-auto px-4 py-6">
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                {[
+                  { name: 'PARKS', icon: '🏰' },
+                  { name: 'RESORTS', icon: '🏨' },
+                  { name: 'OFFERS', icon: '🎁' },
+                  { name: 'RIDES', icon: '🎢' },
+                  { name: 'DINING', icon: '🍽️' },
+                  { name: 'EVENTS', icon: '🎪' }
+                ].map((item, index) => (
+                  <motion.a 
+                    key={item.name}
+                    href="#" 
+                    className="flex items-center space-x-3 p-4 bg-blue-50 rounded-xl text-wonderla-blue font-bold hover:bg-blue-100 transition-all duration-300"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                  >
+                    <span className="text-2xl">{item.icon}</span>
+                    <span className="text-sm">{item.name}</span>
+                  </motion.a>
+                ))}
+              </div>
+              
+              <Button className="w-full bg-gradient-to-r from-wonderla-yellow to-yellow-400 text-wonderla-blue font-black py-4 rounded-full shadow-lg">
+                <Calendar className="mr-2 w-5 h-5" />
+                BOOK TICKETS NOW
+              </Button>
+            </div>
+          </motion.div>
+        )}
       </motion.header>
 
       {/* Hero Section */}
-      <section className="relative h-[80vh] flex items-center justify-center overflow-hidden pt-20">
+      <section className="relative h-[60vh] sm:h-[70vh] lg:h-[80vh] flex items-center justify-center overflow-hidden pt-16 sm:pt-20">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-110"
-          style={{ backgroundImage: 'url(/bg.jfif)' }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-110 hero-bg"
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/70"></div>
         </div>
         
         <div className="relative z-10 text-center text-white px-4 max-w-6xl mx-auto">
@@ -147,27 +227,27 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <p className="text-wonderla-yellow font-semibold text-xl mb-6 tracking-wider">INDIA'S PREMIER AMUSEMENT PARKS</p>
+            <p className="text-wonderla-yellow font-semibold text-sm sm:text-lg lg:text-xl mb-4 sm:mb-6 tracking-wider">INDIA'S PREMIER AMUSEMENT PARKS</p>
             
-            <h1 className="text-8xl font-black mb-6 bg-gradient-to-r from-white to-wonderla-yellow bg-clip-text text-transparent leading-tight">
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-black mb-4 sm:mb-6 bg-gradient-to-r from-white to-wonderla-yellow bg-clip-text text-transparent leading-tight">
               WHERE EVERY RIDE
             </h1>
             
-            <h2 className="text-7xl font-black mb-10 text-wonderla-yellow drop-shadow-lg leading-tight">
+            <h2 className="text-3xl sm:text-5xl lg:text-7xl font-black mb-6 sm:mb-10 text-wonderla-yellow drop-shadow-lg leading-tight">
               IS A NEW ADVENTURE!
             </h2>
             
-            <p className="text-2xl text-gray-200 mb-10 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-base sm:text-xl lg:text-2xl text-gray-200 mb-6 sm:mb-10 max-w-3xl mx-auto leading-relaxed px-4">
               Experience heart-pounding thrills, splash into fun, and create unforgettable memories 
               at India's most exciting theme parks across 4 amazing locations.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button className="bg-wonderla-yellow text-wonderla-blue px-8 py-4 rounded-full font-bold text-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105 shadow-xl">
-                <Calendar className="mr-2 w-5 h-5" />
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+              <Button className="w-full sm:w-auto bg-wonderla-yellow text-wonderla-blue px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-yellow-400 transition-all duration-300 transform hover:scale-105 shadow-xl">
+                <Calendar className="mr-2 w-4 sm:w-5 h-4 sm:h-5" />
                 BOOK TICKETS NOW
               </Button>
-              <Button variant="outline" className="border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-wonderla-blue transition-all duration-300 transform hover:scale-105">
-                <MapPin className="mr-2 w-5 h-5" />
+              <Button variant="outline" className="w-full sm:w-auto border-white text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white hover:text-wonderla-blue transition-all duration-300 transform hover:scale-105">
+                <MapPin className="mr-2 w-4 sm:w-5 h-4 sm:h-5" />
                 FIND LOCATIONS
               </Button>
             </div>
@@ -176,44 +256,48 @@ function App() {
       </section>
 
       {/* Stats Section */}
-      <section className="bg-white py-16 relative z-10">
+      <section className="bg-white py-12 sm:py-16 relative z-10">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <motion.div 
-              className="text-center"
+              className="text-center group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="text-4xl font-black text-wonderla-blue mb-2">25+</div>
-              <div className="text-gray-600 font-medium">YEARS OF THRILLS</div>
+              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">25+</div>
+              <div className="text-gray-600 font-medium text-sm sm:text-base">YEARS OF THRILLS</div>
             </motion.div>
             <motion.div 
-              className="text-center"
+              className="text-center group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="text-4xl font-black text-wonderla-blue mb-2">50M+</div>
-              <div className="text-gray-600 font-medium">HAPPY VISITORS</div>
+              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">50M+</div>
+              <div className="text-gray-600 font-medium text-sm sm:text-base">HAPPY VISITORS</div>
             </motion.div>
             <motion.div 
-              className="text-center"
+              className="text-center group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="text-4xl font-black text-wonderla-blue mb-2">60+</div>
-              <div className="text-gray-600 font-medium">AMAZING RIDES</div>
+              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">60+</div>
+              <div className="text-gray-600 font-medium text-sm sm:text-base">AMAZING RIDES</div>
             </motion.div>
             <motion.div 
-              className="text-center"
+              className="text-center group"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
+              whileHover={{ scale: 1.05 }}
             >
-              <div className="text-4xl font-black text-wonderla-blue mb-2">4</div>
-              <div className="text-gray-600 font-medium">ICONIC LOCATIONS</div>
+              <div className="text-3xl sm:text-4xl font-black text-wonderla-blue mb-2 group-hover:text-wonderla-yellow transition-colors">4</div>
+              <div className="text-gray-600 font-medium text-sm sm:text-base">ICONIC LOCATIONS</div>
             </motion.div>
           </div>
         </div>
@@ -232,56 +316,53 @@ function App() {
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-5">
           <div 
-            className="absolute inset-0 bg-repeat"
-            style={{ 
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M50 15L60 35H40z'/%3E%3Ccircle cx='50' cy='60' r='10'/%3E%3C/g%3E%3C/svg%3E")` 
-            }}
+            className="absolute inset-0 bg-repeat footer-pattern"
           />
         </div>
 
         {/* Newsletter Section */}
         <motion.div 
-          className="bg-wonderla-yellow text-wonderla-blue py-8 relative z-10"
+          className="bg-wonderla-yellow text-wonderla-blue py-6 sm:py-8 relative z-10"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <div className="max-w-7xl mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center justify-between">
-              <div className="text-center md:text-left mb-4 md:mb-0">
-                <h3 className="text-2xl font-black mb-2">🎪 Stay Updated with Wonderla!</h3>
-                <p className="text-lg font-semibold">Get exclusive offers, new ride updates & special discounts!</p>
+            <div className="flex flex-col lg:flex-row items-center justify-between">
+              <div className="text-center lg:text-left mb-6 lg:mb-0">
+                <h3 className="text-xl sm:text-2xl font-black mb-2">🎪 Stay Updated with Wonderla!</h3>
+                <p className="text-base sm:text-lg font-semibold">Get exclusive offers, new ride updates & special discounts!</p>
               </div>
-              <div className="flex items-center space-x-3">
+              <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 w-full lg:w-auto">
                 <input 
                   type="email" 
                   placeholder="Enter your email"
-                  className="px-4 py-3 rounded-full border-2 border-wonderla-blue text-wonderla-blue placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-wonderla-blue w-64"
+                  className="w-full sm:w-64 px-4 py-3 rounded-full border-2 border-wonderla-blue text-wonderla-blue placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-wonderla-blue"
                 />
-                <Button className="bg-wonderla-blue text-white px-6 py-3 rounded-full font-bold hover:bg-blue-800 transition-all duration-300">
-                  <Mail className="mr-2 w-5 h-5" />
+                <Button className="w-full sm:w-auto bg-wonderla-blue text-white px-6 py-3 rounded-full font-bold hover:bg-blue-800 transition-all duration-300">
+                  <Mail className="mr-2 w-4 sm:w-5 h-4 sm:h-5" />
                   Subscribe
                 </Button>
               </div>
             </div>
           </div>
         </motion.div>
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 mb-12">
-            <div className="md:col-span-2">
-              <img src="/logo.png" alt="Wonderla" className="h-16 mb-6 brightness-0 invert" />
-              <p className="text-blue-200 text-lg mb-6 leading-relaxed">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 sm:mb-12">
+            <div className="sm:col-span-2 lg:col-span-2">
+              <img src="/logo.png" alt="Wonderla" className="h-12 sm:h-16 mb-4 sm:mb-6 brightness-0 invert" />
+              <p className="text-blue-200 text-base sm:text-lg mb-4 sm:mb-6 leading-relaxed">
                 India's largest amusement park chain with 25+ years of creating magical moments. 
                 Experience world-class rides, attractions, and hospitality across our 4 iconic locations.
               </p>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-2 sm:space-y-0">
                 <div className="flex items-center text-blue-200">
-                  <Star className="w-5 h-5 text-wonderla-yellow mr-2" />
-                  <span className="font-semibold">4.5/5 Guest Rating</span>
+                  <Star className="w-4 sm:w-5 h-4 sm:h-5 text-wonderla-yellow mr-2" />
+                  <span className="font-semibold text-sm sm:text-base">4.5/5 Guest Rating</span>
                 </div>
                 <div className="flex items-center text-blue-200">
-                  <Users className="w-5 h-5 text-wonderla-yellow mr-2" />
-                  <span className="font-semibold">50M+ Happy Visitors</span>
+                  <Users className="w-4 sm:w-5 h-4 sm:h-5 text-wonderla-yellow mr-2" />
+                  <span className="font-semibold text-sm sm:text-base">50M+ Happy Visitors</span>
                 </div>
               </div>
             </div>
